@@ -1,4 +1,4 @@
-const Person = require('./Person');
+const User = require('./User');
 const Skill = require('./Skill');
 
 let firstSkill = Skill.create(
@@ -7,7 +7,7 @@ let firstSkill = Skill.create(
   }
 )
 
-Person.create(
+User.create(
     [
       {
         name: 'Luke',
@@ -19,11 +19,11 @@ Person.create(
       }
     ]
   )
-  .then((people) => {
-    console.log('Created people: ', people);
+  .then((users) => {
+    console.log('Created users: ', users);
     process.exit();
   })
   .catch((error) => {
-    console.error('Error creating people: ', error);
+    console.error('Error creating users: ', error);
     process.exit();
   })

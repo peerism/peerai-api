@@ -27,8 +27,14 @@ PEER-AI
   * Option 1 - cURL
     ```
     curl -i GET http://localhost:7000
-    curl -v -X POST http://localhost:7000/people --data '[{"name":"Gavin"}]' -H "Content-Type: application/json"
+    curl -v -X POST http://localhost:7000/users --data '[{"email":"gavin@wood.com", "name":"Gavin"}]' -H "Content-Type: application/json"
+    curl -v -X POST http://localhost:7000/users -d "email=gavin@wood.com&name=Gavin" -H "Content-Type: application/x-www-form-urlencoded"
     ```
+    * Register
+      ```
+      curl -v -X POST http://localhost:7000/users/auth/register -d "email=j@j.com&password=123456&name=John" -H "Content-Type: application/x-www-form-urlencoded"
+      curl -v -X POST http://localhost:7000/users/auth/register -d '{"email":"gavin@wood.com", "password":"123456", "name":"Gavin"}' -H "Content-Type: application/json"
+      ```
   * Option 2 - Web browser
     ```
     open -a "Google Chrome" http://localhost:7000
@@ -62,7 +68,7 @@ PEER-AI
   ```
   yarn add mongoose;
   mkdir models; touch models/init.js;
-  touch models/Person.js;
+  touch models/User.js;
   touch models/seeds.js;
   touch models/drop.js
   ```
@@ -83,7 +89,7 @@ PEER-AI
   show dbs
   use peerai
   show collections
-  db.people.find({})
+  db.users.find({})
   db.skills.find({})
   ```
 
@@ -91,7 +97,14 @@ PEER-AI
   ```
   mkdir routes
   ```
-* Modify server.js. Add routes/people.js
+* Modify server.js. Add routes/users.js
+
+* Add authentication with [Passport, Passport-Local, and Passport-Local-Mongoose](https://github.com/saintedlama/passport-local-mongoose):
+  ```
+  yarn add passport passport-local passport-local-mongoose
+  ```
+* Rename Person and people to User and users
+* Add User Registration route
 
 ## FAQ <a id="chapter-faq"></a>
 
@@ -99,7 +112,7 @@ PEER-AI
 
 ## References <a id="chapter-references"></a>
 
-* Express.js server API with JWT authorisation
+* [Express.js server API with JWT authorisation](https://www.youtube.com/watch?v=ggv3rnaHuK8)
 
 ## TODO <a id="chapter-todo"></a>
 

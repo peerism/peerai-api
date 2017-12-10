@@ -1,7 +1,7 @@
-const Person = require('./Person');
+const User = require('./User');
 
-Person.deleteMany()
+User.deleteMany()
   .then(() => {
-    console.log('Deleted people');
+    console.log('Deleted users');
     process.exit();
   })

@@ -3,12 +3,12 @@ const bodyParser = require('body-parser');
 
 const server = express();
 
-const peopleRouter = require('./routes/people');
+const usersRouter = require('./routes/users');
 
 // Middleware Plugins
 server.use(bodyParser.json()); // allow JSON uploads
 server.use(bodyParser.urlencoded({ extended: true })); // allow Form submissions
-server.use('/people', peopleRouter);
+server.use('/users', usersRouter);
 
 // Routes
 server.get('/', (req, res) => {
