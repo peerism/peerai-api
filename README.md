@@ -26,7 +26,8 @@ PEER-AI
 * Run client to send request to server and receive response
   * Option 1 - cURL
     ```
-    curl -i http://localhost:7000
+    curl -i GET http://localhost:7000
+    curl -v -X POST http://localhost:7000/people --data '[{"name":"Gavin"}]' -H "Content-Type: application/json"
     ```
   * Option 2 - Web browser
     ```
@@ -86,14 +87,11 @@ PEER-AI
   db.skills.find({})
   ```
 
-
-## Database Design <a id="chapter-faq"></a>
-
-* Person
-  * name: string
-
-* Skill
-  * name: string
+* Create routes
+  ```
+  mkdir routes
+  ```
+* Modify server.js. Add routes/people.js
 
 ## FAQ <a id="chapter-faq"></a>
 
