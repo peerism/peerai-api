@@ -1,0 +1,17 @@
+{
+  "name": "peerai",
+  "version": "0.1.0",
+  "main": "index.js",
+  "author": "Luke Schoen",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.5"
+  },
+  "scripts": {
+    "dev": "nodemon server.js"
+  }
+}
