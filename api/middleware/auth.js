@@ -1,41 +1,18 @@
 const passport = require('passport');
-// const LocalStrategy = require('passport-local');
 const User = require('../models/User');
 
-// CHANGE: USE "createStrategy" INSTEAD OF "authenticate"
-// since using `email` instead of `username`. 
+// Use "createStrategy" instead of "authenticate".
 // See https://github.com/saintedlama/passport-local-mongoose
 passport.use(User.createStrategy());
-// passport.use(new LocalStrategy({
-//     usernameField: 'email',
-//     passwordField: 'password'
-//   },
-//   (email, password, done) => {
-//     User.findOne({
-//       email: email
-//     }, (error, user) => {
-//       if (error) {
-//         return done(error);
-//       }
-//       if (!user) {
-//         return done(null, false, {
-//           message: 'Username or password incorrect'
-//         });
-//       }
-//       // Do other validation/check if any
-//       return done(null, user);
-//     });
-//   }
-// ));
 
-// use static serialize and deserialize of model for passport session support
+// Use static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Middleware for Passport Authentication
 const register = (req, res, next) => {
 
-  console.log('Middlware for Passport Authentication');
+  console.log('Middlware for Passport Registration');
   // Create new User model
   const user = new User({
     email: req.body.email,
@@ -57,5 +34,6 @@ const register = (req, res, next) => {
 }
 
 module.exports = {
-  register: register
+  register: register,
+  signIn: passport.authenticate('local', { session: false })
 }

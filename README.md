@@ -32,8 +32,13 @@ PEER-AI
     ```
     * Register
       ```
-      curl -v -X POST http://localhost:7000/users/auth/register -d "email=j@j.com&password=123456&name=John" -H "Content-Type: application/x-www-form-urlencoded"
+      curl -v -X POST http://localhost:7000/users/auth/register -d "email=luke@schoen.com&password=123456&name=Luke" -H "Content-Type: application/x-www-form-urlencoded"
       curl -v -X POST http://localhost:7000/users/auth/register -d '{"email":"gavin@wood.com", "password":"123456", "name":"Gavin"}' -H "Content-Type: application/json"
+      ```
+    * Sign in
+      ```
+      curl -v -X POST http://localhost:7000/users/auth -d "email=luke@schoen.com&password=123456" -H "Content-Type: application/x-www-form-urlencoded"
+      curl -v -X POST http://localhost:7000/users/auth -d '{"email":"gavin@wood.com", "password":"123456"}' -H "Content-Type: application/json"
       ```
   * Option 2 - Web browser
     ```
@@ -116,4 +121,4 @@ PEER-AI
 
 ## TODO <a id="chapter-todo"></a>
 
-* [ ] - TBC
+* [ ] TBC

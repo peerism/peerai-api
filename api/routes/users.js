@@ -27,6 +27,17 @@ router.post('/auth/register',
   }
 )
 
+router.post('/auth',
+  // Middleware Chain
+  authMiddleware.signIn,
+  // Handler
+  (req, res) => {
+    res.json({
+      user: req.user
+    })
+  }
+)
+
 router.post('/', (req, res) => {
   User.create(req.body)
     .then((user) => {
