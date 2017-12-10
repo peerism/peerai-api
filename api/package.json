@@ -6,12 +6,16 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mongoose": "^4.13.6"
   },
   "devDependencies": {
     "nodemon": "^1.12.5"
   },
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "seed": "node ./models/seeds.js",
+    "drop": "node ./models/drop.js",
+    "reset": "npm run drop && npm run seed"
   }
 }

@@ -13,29 +13,87 @@ PEER-AI
 
 ## Quick Start Guide <a id="chapter-0"></a>
 
-* Run server then open client in browser
+* Run MongoDB Server
+  ```
+  mongod
+  ```
+
+* Run server then open client in browser, then seed the database
   ```
   yarn run dev;
-  open -a "Google Chrome" http://localhost:7000
+  yarn run seed;
+
+* Run client to send request to server and receive response
+  * Option 1 - cURL
+    ```
+    curl -i http://localhost:7000
+    ```
+  * Option 2 - Web browser
+    ```
+    open -a "Google Chrome" http://localhost:7000
+    ```
+
+* Drop the database
+  ```
+  yarn run drop;
   ```
 
 ## Log <a id="chapter-log"></a>
 
 * Initial setup
   ```
-  git init; touch README.md; touch .gitignore; mkdir server client;
+  git init; touch README.md; touch .gitignore; mkdir api web;
   code .;
   ```
   * [Add boilerplate contents to .gitignore for Node.js](https://github.com/github/gitignore/blob/master/Node.gitignore)
-* Setup server
+
+* Setup API
   ```
-  cd server; yarn init -y; 
+  cd api; yarn init -y; 
   yarn add express body-parser;
   yarn add nodemon --dev;
   touch server.js;
   ```
-* Add boilerplate contents to server/server.js
-* Add scripts section to server/package.json
+* Add boilerplate contents to api/server.js
+* Add "dev" in "scripts" section of api/package.json
+
+* Add Mongoose
+  ```
+  yarn add mongoose;
+  mkdir models; touch models/init.js;
+  touch models/Person.js;
+  touch models/seeds.js;
+  touch models/drop.js
+  ```
+
+* Create Models for Mongoose
+* Add boilerplate contents to models
+* Add scripts to api/package.json
+
+* Run MongoDB Server
+  ```
+  mongod
+  ```
+
+* MongoDB Client
+  ```
+  mongo
+
+  show dbs
+  use peerai
+  show collections
+  db.people.find({})
+  db.skills.find({})
+  ```
+
+
+## Database Design <a id="chapter-faq"></a>
+
+* Person
+  * name: string
+
+* Skill
+  * name: string
 
 ## FAQ <a id="chapter-faq"></a>
 
