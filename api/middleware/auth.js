@@ -1,23 +1,24 @@
 const passport = require('passport');
 const JWT = require('jsonwebtoken');
+const PassportJwt = require('passport-jwt');
 const User = require('../models/User');
 
-const jwtSecret = 'xyz';
-const jwtAlgorithm = 'HS256';
-const jwtExpiresIn = '7 days';
+const JWT_SECRET = 'xyz';
+const JWT_ALGORITHM = 'HS256';
+const JWT_EXPIRES_IN = '7 days';
 
 // Use "createStrategy" instead of "authenticate".
 // See https://github.com/saintedlama/passport-local-mongoose
 passport.use(User.createStrategy());
 
 // Use static serialize and deserialize of model for passport session support
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 // Middleware for Passport Authentication
 const register = (req, res, next) => {
 
-  console.log('Middlware for Passport Registration');
+  console.log('Middleware for Passport Registration');
   // Create new User model
   const user = new User({
     email: req.body.email,
@@ -38,6 +39,34 @@ const register = (req, res, next) => {
   })
 }
 
+const jwtOptions = {
+  //   - Authorization: Bearer in request headers
+  jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET,
+  //   - Algorithms used to sign in
+  algorithms: [JWT_ALGORITHM]
+}
+
+// Passport JWT - https://www.npmjs.com/package/passport-jwt
+passport.use(new PassportJwt.Strategy(jwtOptions, 
+  // Post-Verified token - https://www.npmjs.com/package/passport-jwt
+  (jwtPayload, done) => {
+    // Find user in MongoDB using the `id` in the JWT
+    // User.findById(jwtPayload.sub)
+    User.findById(jwtPayload._doc._id)
+      .then((user) => {
+        if (user) { 
+          done(null, user); 
+        } else {
+          done(null, false); 
+        }
+      })
+      .catch((error) => {
+        done(error, false);
+      })
+  }
+))
+
 // JWT signed token - http://jwt.io/
 const signJWTForUser = (req, res) => {
 
@@ -51,12 +80,12 @@ const signJWTForUser = (req, res) => {
       email: user.email
     },
     // secretOrPrivateKey - https://raymii.org/s/snippets/OpenSSL_Password_Generator.html
-    jwtSecret,
+    JWT_SECRET,
     // options - https://github.com/auth0/node-jsonwebtoken
     {
-      algorithm: jwtAlgorithm,
-      expiresIn: jwtExpiresIn,
-      subject: user._id.toString()
+      subject: user._id.toString(),
+      algorithm: JWT_ALGORITHM,
+      expiresIn: JWT_EXPIRES_IN
     }
   )
 
@@ -69,6 +98,7 @@ const signJWTForUser = (req, res) => {
 module.exports = {
   initialize: passport.initialize(),
   register: register,
-  signIn: passport.authenticate('local', { session: true }),
-  signJWTForUser: signJWTForUser
+  signIn: passport.authenticate('local', { session: false }),
+  signJWTForUser: signJWTForUser,
+  requireJWT: passport.authenticate('jwt', { session: false })
 }

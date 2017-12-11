@@ -5,20 +5,17 @@ const authMiddleware = require('../middleware/auth');
 
 const router = new express.Router();
 
-router.get('/', (req, res) => {
-  User.find()
-  .populate('skill')
-  .then(users => res.json({ data: users }))
-  .catch(error => res.json({ error: error.message }))
-});
-
 // Register
 router.post('/auth/register', 
   // Middlware Chain
   (req, res, next) => {
     console.log('Processing user registration with: ', req.body);
-    authMiddleware.register(req, res, next)
+    authMiddleware.register(req, res, next);
   }, 
+  (req, res, next) => {
+    authMiddleware.signIn;
+    next();
+  },
   // Handler
   authMiddleware.signJWTForUser
 )
@@ -30,6 +27,15 @@ router.post('/auth',
   authMiddleware.signJWTForUser
 )
 
+// GET localhost:7000/users
+router.get('/', authMiddleware.requireJWT, (req, res) => {
+  User.find()
+    .populate('skill')
+    .then(users => res.json({ data: users }))
+    .catch(error => res.status(500).json({ error: error.message }))
+});
+
+// POST localhost:7000/users
 router.post('/', (req, res) => {
   User.create(req.body)
     .then((user) => {

@@ -30,15 +30,19 @@ PEER-AI
     curl -v -X POST http://localhost:7000/users --data '[{"email":"gavin@wood.com", "name":"Gavin"}]' -H "Content-Type: application/json"
     curl -v -X POST http://localhost:7000/users -d "email=gavin@wood.com&name=Gavin" -H "Content-Type: application/x-www-form-urlencoded"
     ```
-    * Register
+    * Register with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
       curl -v -X POST http://localhost:7000/users/auth/register -d "email=luke@schoen.com&password=123456&name=Luke" -H "Content-Type: application/x-www-form-urlencoded"
       curl -v -X POST http://localhost:7000/users/auth/register -d '{"email":"gavin@wood.com", "password":"123456", "name":"Gavin"}' -H "Content-Type: application/json"
       ```
-    * Sign in
+    * Sign in with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
       curl -v -X POST http://localhost:7000/users/auth -d "email=luke@schoen.com&password=123456" -H "Content-Type: application/x-www-form-urlencoded"
       curl -v -X POST http://localhost:7000/users/auth -d '{"email":"gavin@wood.com", "password":"123456"}' -H "Content-Type: application/json"
+      ```
+    * Access a restricted endpoint by providing JWT
+      ```
+      curl -v -X GET http://localhost:7000/users -d "email=luke@schoen.com&password=123456" -H "Content-Type: application/x-www-form-urlencoded" -H "X-Authorization: Bearer <INSERT_TOKEN>"
       ```
   * Option 2 - Web browser
     ```
@@ -115,6 +119,10 @@ PEER-AI
 * Add JWT library to return a token instead of a user
   ```
   yarn add jsonwebtoken;
+  ```
+* Add Passport JWT library
+  ```
+  yarn add passport-jwt
   ```
 
 ## FAQ <a id="chapter-faq"></a>
