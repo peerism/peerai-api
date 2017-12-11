@@ -5,7 +5,7 @@ const authMiddleware = require('../middleware/auth');
 
 const router = new express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', authMiddleware.signInWithCookiesForUser, (req, res) => {
   User.find()
   .populate('skill')
   .then(users => res.json({ data: users }))
@@ -18,16 +18,18 @@ router.post('/auth/register',
   (req, res, next) => {
     console.log('Processing user registration with: ', req.body);
     authMiddleware.register(req, res, next)
-  }, 
+  },
   // Handler
-  authMiddleware.signJWTForUser
+  // authMiddleware.signInWithJWTForUser
+  authMiddleware.signInWithCookiesForUser
 )
 
 router.post('/auth',
   // Middleware Chain
   authMiddleware.signIn,
   // Handler
-  authMiddleware.signJWTForUser
+  // authMiddleware.signInWithJWTForUser
+  authMiddleware.signInWithCookiesForUser
 )
 
 router.post('/', (req, res) => {

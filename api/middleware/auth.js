@@ -2,9 +2,9 @@ const passport = require('passport');
 const JWT = require('jsonwebtoken');
 const User = require('../models/User');
 
-const jwtSecret = 'xyz';
-const jwtAlgorithm = 'HS256';
-const jwtExpiresIn = '7 days';
+const JWT_SECRET = 'xyz';
+const JWT_ALGORITHM = 'HS256';
+const JWT_EXPIRES_IN = '7 days';
 
 // Use "createStrategy" instead of "authenticate".
 // See https://github.com/saintedlama/passport-local-mongoose
@@ -39,7 +39,7 @@ const register = (req, res, next) => {
 }
 
 // JWT signed token - http://jwt.io/
-const signJWTForUser = (req, res) => {
+const signInWithJWTForUser = (req, res) => {
 
   // Obtain user from request object
   const user = req.user;
@@ -51,11 +51,11 @@ const signJWTForUser = (req, res) => {
       email: user.email
     },
     // secretOrPrivateKey - https://raymii.org/s/snippets/OpenSSL_Password_Generator.html
-    jwtSecret,
+    JWT_SECRET,
     // options - https://github.com/auth0/node-jsonwebtoken
     {
-      algorithm: jwtAlgorithm,
-      expiresIn: jwtExpiresIn,
+      algorithm: JWT_ALGORITHM,
+      expiresIn: JWT_EXPIRES_IN,
       subject: user._id.toString()
     }
   )
@@ -66,9 +66,23 @@ const signJWTForUser = (req, res) => {
   })
 }
 
+// Response is 200 when authorized and 403 when not authorized
+// Cookie: connect.sid=xs<INSERT_COOKIE>
+const signInWithCookiesForUser = (req, res) => {
+  if (req.user) {
+    res.error;
+  } else {
+    res.status(403).end();
+  }
+}
+
 module.exports = {
-  initialize: passport.initialize(),
+  // Initialise Passport to accept sessions and scan for cookies
+  initialize: [ passport.initialize(), passport.session() ],
   register: register,
+  // Sign In with JWT
   signIn: passport.authenticate('local', { session: true }),
-  signJWTForUser: signJWTForUser
+  signInWithJWTForUser: signInWithJWTForUser,
+  // Sign In with Cookies
+  signInWithCookiesForUser: signInWithCookiesForUser
 }

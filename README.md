@@ -40,6 +40,27 @@ PEER-AI
       curl -v -X POST http://localhost:7000/users/auth -d "email=luke@schoen.com&password=123456" -H "Content-Type: application/x-www-form-urlencoded"
       curl -v -X POST http://localhost:7000/users/auth -d '{"email":"gavin@wood.com", "password":"123456"}' -H "Content-Type: application/json"
       ```
+    * Note: Copy/paste the Token response into http://jwt.io to show the Decoded version of the Payload
+    * Access using Cookies. Response is 200 when authorized and 403 when not authorized
+      * Step 1: Drop 
+        ```
+        yarn run drop
+        yarn run dev
+        ```
+      * Step 2: Register a User to get a Token returned
+        ```
+        curl -v -X POST http://localhost:7000/users/auth/register -d "email=luke@schoen.com&password=123456&name=Luke" -H "Content-Type: application/x-www-form-urlencoded"
+        ```
+      * Step 3: Sign in as User to get Cookie in the response (i.e. `< set-cookie: connect.sid=s%3A0lvji3Qe2qiHzTgyrhT8gN0-DpLBylws.AAS6WJprRAgw5cI7mbZNN0Vl7r4TAFRnbpTZDqHPQc4; Path=/; HttpOnly`)
+        ```
+        curl -v -X POST http://localhost:7000/users/auth -d "email=luke@schoen.com&password=123456" -H "Content-Type: application/x-www-form-urlencoded"
+        ```
+
+      * Step 4: Access an area of the site that requires authorisation by providing the Cookie in the Headers
+        ```
+        curl -v -i GET http://localhost:7000/users -H "Content-Type: application/json" --cookie "connect-sid=s%3A0lvji3Qe2qiHzTgyrhT8gN0-DpLBylws.AAS6WJprRAgw5cI7mbZNN0Vl7r4TAFRnbpTZDqHPQc4"
+        ```
+      * Note: Cookies provided in response Headers
   * Option 2 - Web browser
     ```
     open -a "Google Chrome" http://localhost:7000
@@ -115,6 +136,10 @@ PEER-AI
 * Add JWT library to return a token instead of a user
   ```
   yarn add jsonwebtoken;
+  ```
+* Add Cookies
+  ```
+  yarn add express-session cookie-parser
   ```
 
 ## FAQ <a id="chapter-faq"></a>
