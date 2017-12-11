@@ -1,5 +1,10 @@
 const passport = require('passport');
+const JWT = require('jsonwebtoken');
 const User = require('../models/User');
+
+const jwtSecret = 'xyz';
+const jwtAlgorithm = 'HS256';
+const jwtExpiresIn = '7 days';
 
 // Use "createStrategy" instead of "authenticate".
 // See https://github.com/saintedlama/passport-local-mongoose
@@ -33,7 +38,37 @@ const register = (req, res, next) => {
   })
 }
 
+// JWT signed token - http://jwt.io/
+const signJWTForUser = (req, res) => {
+
+  // Obtain user from request object
+  const user = req.user;
+
+  // Create signed JWT
+  const token = JWT.sign(
+    // payload
+    {
+      email: user.email
+    },
+    // secretOrPrivateKey - https://raymii.org/s/snippets/OpenSSL_Password_Generator.html
+    jwtSecret,
+    // options - https://github.com/auth0/node-jsonwebtoken
+    {
+      algorithm: jwtAlgorithm,
+      expiresIn: jwtExpiresIn,
+      subject: user._id.toString()
+    }
+  )
+
+  // Return token in response object
+  res.json({
+    token: token
+  })
+}
+
 module.exports = {
+  initialize: passport.initialize(),
   register: register,
-  signIn: passport.authenticate('local', { session: false })
+  signIn: passport.authenticate('local', { session: true }),
+  signJWTForUser: signJWTForUser
 }

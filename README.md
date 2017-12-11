@@ -110,6 +110,12 @@ PEER-AI
   ```
 * Rename Person and people to User and users
 * Add User Registration route
+* Add User Sign in route
+* Enable Sessions
+* Add JWT library to return a token instead of a user
+  ```
+  yarn add jsonwebtoken;
+  ```
 
 ## FAQ <a id="chapter-faq"></a>
 

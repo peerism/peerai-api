@@ -20,22 +20,14 @@ router.post('/auth/register',
     authMiddleware.register(req, res, next)
   }, 
   // Handler
-  (req, res) => {
-    res.json({
-      user: req.user
-    })
-  }
+  authMiddleware.signJWTForUser
 )
 
 router.post('/auth',
   // Middleware Chain
   authMiddleware.signIn,
   // Handler
-  (req, res) => {
-    res.json({
-      user: req.user
-    })
-  }
+  authMiddleware.signJWTForUser
 )
 
 router.post('/', (req, res) => {
