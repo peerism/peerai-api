@@ -10,11 +10,15 @@ let firstSkill = Skill.create(
 User.create(
     [
       {
+        email: 'luke@schoen.com',
+        password: '123456',
         name: 'Luke',
         skills: [firstSkill] 
       },
       {
+        email: 'nathan@waters.com',
         name: 'Nathan',
+        password: '123456',
         skills: [firstSkill]
       }
     ]

@@ -28,12 +28,18 @@ router.post('/auth',
 )
 
 // GET localhost:7000/users
-router.get('/', authMiddleware.requireJWT, (req, res) => {
-  User.find()
-    .populate('skill')
-    .then(users => res.json({ data: users }))
-    .catch(error => res.status(500).json({ error: error.message }))
-});
+router.get('/', 
+  authMiddleware.validateJWT,
+  (req, res) => {
+    User.find()
+      .populate('skill')
+      .then(users => {
+        console.log('Authorised: User list returned in response');
+        res.json({ data: users });
+      })
+      .catch(error => res.status(500).json({ error: error.message }))
+  }
+);
 
 // POST localhost:7000/users
 router.post('/', (req, res) => {
