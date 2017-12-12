@@ -19,8 +19,21 @@ server.use('/users', usersRouter);
 
 // Routes
 server.get('/', (req, res) => {
-  res.json({})
+  let html = '<form action="/" method="post">' +
+  'Email: <input type="text" email="email"><br>' +
+  '<button type="submit">Submit</button>' +
+  '</form>';
+  
+  if (req.session.email) {
+    html += '<br>Your email from your session is: ' + req.session.email;
+  }
+  res.send(html);
 })
+
+server.post('/', (req, res) => {
+  req.session.email = req.body.email;
+  res.redirect('/');
+});
 
 const port = 7000;
 server.listen(port, (error) => {

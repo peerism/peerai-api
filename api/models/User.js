@@ -17,7 +17,7 @@ const UserSchema = Schema({
 UserSchema.plugin(passportLocalMongoose, {
   usernameField: 'email', // Override login field to be email instead
   usernameLowerCase: true, // Ensure all emails are lowercase
-  session: true // Disable session cookies since we will use JWTs
+  session: true // Use session cookies instead of JWTs
 })
 
 const User = mongoose.model('User', UserSchema);
