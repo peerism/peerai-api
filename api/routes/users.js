@@ -5,6 +5,11 @@ const authMiddleware = require('../middleware/auth');
 
 const router = new express.Router();
 
+// Require controller modules
+const usersController = require('../controllers/usersController');
+
+// ROUTES
+
 // Register
 router.post('/auth/register', 
   // Middlware Chain
@@ -21,33 +26,20 @@ router.post('/auth/register',
 )
 
 router.post('/auth',
-  // Middleware Chain
   authMiddleware.signIn,
-  // Handler
   authMiddleware.signJWTForUser
 )
 
 // GET localhost:7000/users
 router.get('/', 
   authMiddleware.validateJWT,
-  (req, res) => {
-    User.find()
-      .populate('skill')
-      .then(users => {
-        console.log('Authorised: User list returned in response');
-        res.json({ data: users });
-      })
-      .catch(error => res.status(500).json({ error: error.message }))
-  }
+  usersController.userList
 );
 
-// POST localhost:7000/users
-router.post('/', (req, res) => {
-  User.create(req.body)
-    .then((user) => {
-      res.status(201).json(user).end();
-    })
-    .catch(error => res.json({ error }))
-});
+// POST localhost:7000/users/create
+router.post('/create',
+  authMiddleware.validateJWT,
+  usersController.userCreate
+);
 
 module.exports = router;

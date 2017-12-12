@@ -24,11 +24,6 @@ PEER-AI
 
 * Run client to send request to server and receive response
   * cURL
-    ```
-    curl -i GET http://localhost:7000
-    curl -v -X POST http://localhost:7000/users --data '[{"email":"gavin@wood.com", "name":"Gavin"}]' -H "Content-Type: application/json"
-    curl -v -X POST http://localhost:7000/users -d "email=gavin@wood.com&name=Gavin" -H "Content-Type: application/x-www-form-urlencoded"
-    ```
     * Register with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
       curl -v -X POST http://localhost:7000/users/auth/register -d "email=luke@schoen.com&password=123456&name=Luke" -H "Content-Type: application/x-www-form-urlencoded"
@@ -42,6 +37,11 @@ PEER-AI
     * Access a restricted endpoint by providing JWT
       ```
       curl -v -X GET http://localhost:7000/users -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
+      ```
+    * Create user by providing JWT
+      ```
+      curl -v -X POST http://localhost:7000/users/create --data '[{"email":"test@fake.com", "name":"Test"}]' -H "Content-Type: application/json" -H "Authorization: JWT <INSERT_TOKEN>"
+      curl -v -X POST http://localhost:7000/users/create -d "email=test2@fake.com&name=Test2" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
       ```
 
 * Drop the database
@@ -124,6 +124,7 @@ PEER-AI
   yarn add passport-jwt
   ```
 * Add restricted endpoint that requires valid JWT to access
+* Add Controllers https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
 
 ## FAQ <a id="chapter-faq"></a>
 
@@ -141,6 +142,7 @@ PEER-AI
 ## References <a id="chapter-references"></a>
 
 * [Express.js server API with JWT authorisation](https://www.youtube.com/watch?v=ggv3rnaHuK8)
+* [Express.js Routes](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes)
 
 ## TODO <a id="chapter-todo"></a>
 
