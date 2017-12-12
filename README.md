@@ -18,36 +18,40 @@ PEER-AI
   mongod
   ```
 
-* Run server then open client in browser, then seed the database
+* Drop the server. Run server then try cURL requests
   ```
-  yarn run dev;
-  yarn run seed;
+  yarn run drop; yarn run dev; 
 
 * Run client to send request to server and receive response
-  * Option 1 - cURL
+  * cURL
     ```
     curl -i GET http://localhost:7000
     curl -v -X POST http://localhost:7000/users --data '[{"email":"gavin@wood.com", "name":"Gavin"}]' -H "Content-Type: application/json"
     curl -v -X POST http://localhost:7000/users -d "email=gavin@wood.com&name=Gavin" -H "Content-Type: application/x-www-form-urlencoded"
     ```
-    * Register
+    * Register with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
       curl -v -X POST http://localhost:7000/users/auth/register -d "email=luke@schoen.com&password=123456&name=Luke" -H "Content-Type: application/x-www-form-urlencoded"
       curl -v -X POST http://localhost:7000/users/auth/register -d '{"email":"gavin@wood.com", "password":"123456", "name":"Gavin"}' -H "Content-Type: application/json"
       ```
-    * Sign in
+    * Sign in with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
       curl -v -X POST http://localhost:7000/users/auth -d "email=luke@schoen.com&password=123456" -H "Content-Type: application/x-www-form-urlencoded"
       curl -v -X POST http://localhost:7000/users/auth -d '{"email":"gavin@wood.com", "password":"123456"}' -H "Content-Type: application/json"
       ```
-  * Option 2 - Web browser
-    ```
-    open -a "Google Chrome" http://localhost:7000
-    ```
+    * Access a restricted endpoint by providing JWT
+      ```
+      curl -v -X GET http://localhost:7000/users -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
+      ```
 
 * Drop the database
   ```
   yarn run drop;
+  ```
+
+* Seed the database
+  ```
+  yarn run seed;
   ```
 
 ## Log <a id="chapter-log"></a>
@@ -111,15 +115,28 @@ PEER-AI
 * Rename Person and people to User and users
 * Add User Registration route
 * Add User Sign in route
-* Enable Sessions
 * Add JWT library to return a token instead of a user
   ```
   yarn add jsonwebtoken;
   ```
+* Add Passport JWT library
+  ```
+  yarn add passport-jwt
+  ```
+* Add restricted endpoint that requires valid JWT to access
 
 ## FAQ <a id="chapter-faq"></a>
 
-* TBC
+* How to understand how to use Passport JWT library?
+  * Refer to the library codebase on Github or in node_modules/jsonwebtoken/ i.e. [verify.js](https://github.com/auth0/node-jsonwebtoken/blob/master/verify.js)
+  * Use breakpoints
+  * Experiment using Node. i.e. Run `node` then
+    ```
+    npm install jsonwebtoken
+
+    const JWT = require('jsonwebtoken');
+    JWT.decode("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx0ZnNjaG9lbkBnbWFpbC5jb20iLCJpYXQiOjE1MTMwNjY3NTEsImV4cCI6MTUxMzY3MTU1MSwic3ViIjoiNWEyZjkwZmZiNTI5YjI0YzM5MTA1NWM3In0.MkcCR1YD2c21x_WOQObyY-UPAQDWTcooOiO69saUVMI")
+    ```
 
 ## References <a id="chapter-references"></a>
 
@@ -127,4 +144,5 @@ PEER-AI
 
 ## TODO <a id="chapter-todo"></a>
 
-* [ ] TBC
+* [ ] Integrate with Peerism React Native app
+* [ ] Integrate Solidity smart contract using TestRPC

@@ -14,7 +14,9 @@ server.use('/users', usersRouter);
 
 // Routes
 server.get('/', (req, res) => {
-  res.json({})
+  res.status(404).json({
+    message: 'Error: Server under construction'
+  });
 })
 
 const port = 7000;
