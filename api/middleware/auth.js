@@ -66,7 +66,7 @@ const register = (req, res, next) => {
 
 const validateJWT = (req, res, next) => {
   // Extract token without "JWT " or "Bearer " prefix
-  const token = req.headers.authorization.split(" ")[1];
+  const token = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
   if (token) {
     // https://github.com/auth0/node-jsonwebtoken
     JWT.verify(token, JWT_SECRET, function(error, decodedToken) {
