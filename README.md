@@ -142,6 +142,13 @@ PEER-AI
   mkdir test/models;
   touch test/models/users_test.js
   ```
+* Add Dotenv library to use different database in development and testing
+  ```
+  yarn add lodash;
+  yarn add dotenv --dev;
+  touch .sample-env;
+  echo 'NODE_ENV=development' >> ./.sample-env;
+  ```
 
 ## FAQ <a id="chapter-faq"></a>
 

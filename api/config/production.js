@@ -1,0 +1,3 @@
+module.exports = {
+  logging: false
+};
