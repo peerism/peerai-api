@@ -3,6 +3,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const app = require('../../app');
+const config = require('../../config/config');
 
 const User = require('../../models/User');
 const Skill = require('../../models/Skill');
@@ -13,7 +14,7 @@ describe("Users Routes API", function(done) {
 
   // Setup server for tests
   let server;
-  const port = 7111;
+  const port = config.port;
 
   // Asynchronous
   before(function(done) {
