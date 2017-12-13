@@ -35,36 +35,37 @@ const register = (req, res, next) => {
   })
 }
 
-// const jwtOptions = {
-//   //   - Authorization: Bearer in request headers
-//   jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
-//   secretOrKey: JWT_SECRET,
-//   //   - Algorithms used to sign in
-//   algorithms: [JWT_ALGORITHM]
-// }
+const jwtOptions = {
+  // Authorization: Bearer in request headers
+  jwtFromRequest: PassportJwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: JWT_SECRET,
+  // Algorithms used to sign in
+  algorithms: [JWT_ALGORITHM]
+}
 
-// // Passport JWT - https://www.npmjs.com/package/passport-jwt
-// passport.use(new PassportJwt.Strategy(jwtOptions, 
-//   // Post-Verified token - https://www.npmjs.com/package/passport-jwt
-//   (jwtPayload, done) => {
-//     console.log('PassportJwt Strategy being processed');
-//     // Find user in MongoDB using the `id` in the JWT
-//     // User.findById(jwtPayload.sub)
-//     User.findById(jwtPayload._doc._id)
-//       .then((user) => {
-//         if (user) { 
-//           done(null, user); 
-//         } else {
-//           done(null, false); 
-//         }
-//       })
-//       .catch((error) => {
-//         done(error, false);
-//       })
-//   }
-// ))
+// Passport JWT Strategy triggered by validateJWTWithPassportJWT 
+// https://www.npmjs.com/package/passport-jwt
+passport.use(new PassportJwt.Strategy(jwtOptions, 
+  // Post-Verified token - https://www.npmjs.com/package/passport-jwt
+  (jwtPayload, done) => {
+    console.log('PassportJwt Strategy being processed');
+    // Find user in MongoDB using the `id` in the JWT
+    User.findById(jwtPayload.sub)
+    // User.findById(jwtPayload._doc._id)
+      .then((user) => {
+        if (user) { 
+          done(null, user); 
+        } else {
+          done(null, false); 
+        }
+      })
+      .catch((error) => {
+        done(error, false);
+      })
+  }
+))
 
-const validateJWT = (req, res, next) => {
+const validateJWTManually = (req, res, next) => {
   // Extract token without "JWT " or "Bearer " prefix
   const token = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
   if (token) {
@@ -146,6 +147,6 @@ module.exports = {
   register: register,
   signIn: passport.authenticate('local', { session: false }),
   signJWTForUser: signJWTForUser,
-  // requireJWT: passport.authenticate('jwt', { session: false }),
-  validateJWT: validateJWT
+  validateJWTWithPassportJWT: passport.authenticate('jwt', { session: false }),
+  validateJWTManually: validateJWTManually
 }

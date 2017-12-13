@@ -5,6 +5,7 @@ const userList = (req, res) => {
   User.find()
     .populate('skill')
     .then(users => {
+      res.body = users;
       console.log('Authorised: User list returned in response');
       res.json({ data: users });
     })

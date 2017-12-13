@@ -20,6 +20,10 @@ UserSchema.plugin(passportLocalMongoose, {
   session: false // Disable session cookies since we will use JWTs
 })
 
-const User = mongoose.model('User', UserSchema);
+UserSchema.methods.fullName = function() {
+  return `${this.name}`;
+}
+
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 module.exports = User;

@@ -32,13 +32,15 @@ router.post('/auth',
 
 // GET localhost:7000/users
 router.get('/', 
-  authMiddleware.validateJWT,
+  // authMiddleware.validateJWTManually,
+  authMiddleware.validateJWTWithPassportJWT,
   usersController.userList
 );
 
 // POST localhost:7000/users/create
 router.post('/create',
-  authMiddleware.validateJWT,
+  // authMiddleware.validateJWTManually,
+  authMiddleware.validateJWTWithPassportJWT,
   usersController.userCreate
 );
 

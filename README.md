@@ -20,7 +20,8 @@ PEER-AI
 
 * Drop the server. Run server then try cURL requests
   ```
-  yarn run drop; yarn run dev; 
+  yarn run drop; yarn run dev;
+  ``` 
 
 * Run client to send request to server and receive response
   * cURL
@@ -36,13 +37,18 @@ PEER-AI
       ```
     * Access a restricted endpoint by providing JWT
       ```
-      curl -v -X GET http://localhost:7000/users -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
+      curl -v -X GET http://localhost:7000/users -H "Content-Type: application/json" -H "Authorization: Bearer <INSERT_TOKEN>"
       ```
     * Create user by providing JWT
       ```
       curl -v -X POST http://localhost:7000/users/create --data '[{"email":"test@fake.com", "name":"Test"}]' -H "Content-Type: application/json" -H "Authorization: JWT <INSERT_TOKEN>"
       curl -v -X POST http://localhost:7000/users/create -d "email=test2@fake.com&name=Test2" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
       ```
+
+* Run Tests on port 7111
+  ```
+  yarn run drop; yarn run test-watch
+  ```
 
 * Drop the database
   ```
@@ -125,6 +131,17 @@ PEER-AI
   ```
 * Add restricted endpoint that requires valid JWT to access
 * Add Controllers https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
+* Add Route Tests
+  ```
+  yarn add mocha chai chai-http --dev;
+  mkdir -p test/routes;
+  touch test/routes/users_test.js;
+  ```
+* Add Model Tests
+  ```
+  mkdir test/models;
+  touch test/models/users_test.js
+  ```
 
 ## FAQ <a id="chapter-faq"></a>
 
