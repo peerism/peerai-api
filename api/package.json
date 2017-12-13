@@ -15,12 +15,17 @@
     "passport-local-mongoose": "^4.4.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "chai-http": "^3.0.0",
+    "mocha": "^4.0.1",
     "nodemon": "^1.12.5"
   },
   "scripts": {
     "dev": "nodemon server.js",
     "seed": "node ./models/seeds.js",
     "drop": "node ./models/drop.js",
-    "reset": "npm run drop && npm run seed"
+    "reset": "npm run drop && npm run seed",
+    "test": "NODE_ENV=test mocha --recursive test/**/*_test.js",
+    "test-watch": "nodemon --exec \"yarn test\""
   }
 }

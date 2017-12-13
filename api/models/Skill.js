@@ -5,6 +5,6 @@ const SkillSchema = Schema({
   name: String
 });
 
-const Skill = mongoose.model('Skill', SkillSchema);
+const Skill = mongoose.models.Skill || mongoose.model('Skill', SkillSchema);
 
 module.exports = Skill;
