@@ -13,6 +13,13 @@ PEER-AI
 
 ## Quick Start Guide <a id="chapter-0"></a>
 
+* Compile, migrate, and test Smart Contracts
+  ```
+  truffle compile;
+  truffle migrate;
+  truffle test;
+  ```
+
 * Run MongoDB Server
   ```
   mongod
@@ -149,16 +156,51 @@ PEER-AI
   touch .sample-env;
   echo 'NODE_ENV=development' >> ./.sample-env;
   ```
-* Add Ethereum dependencies
+* Add Ethereum dependencies including TestRPC
   ```
-  yarn install web3 ethereumjs-util ethereumjs-tx eth-lightwallet
-  yarn install ethereumjs-testrpc
+  yarn add web3 ethereumjs-util ethereumjs-tx eth-lightwallet;
+  yarn add ethereumjs-testrpc --dev;
   ```
   * References
     * https://medium.com/@codetractio/try-out-ethereum-using-only-nodejs-and-npm-eabaaaf97c80
     * EthereumJS Util - Library for cryptographic hashes for Ethereum addresses - https://github.com/ethereumjs/ethereumjs-util
     * EthereumJS Tx - library to create, edit, and sign Ethereum transactions - https://github.com/ethereumjs/ethereumjs-tx
     * EthereumJS LightWallet - https://github.com/ConsenSys/eth-lightwallet
+* Run shell script in new Terminal tab (copy from https://github.com/ltfschoen/solidity_test/blob/master/testrpc.sh)
+  ```
+  rm -rf ./db;
+  mkdir db && mkdir db/chaindb;
+  cd ~/code/blockchain/solidity_test; testrpc --account '0x0000000000000000000000000000000000000000000000000000000000000001, 10002471238800000000000' \
+    --account '0x0000000000000000000000000000000000000000000000000000000000000002, 10004471238800000000000' \
+    --account '0x0000000000000000000000000000000000000000000000000000000000000003, 10004471238800000000000' \
+    --account '0x0000000000000000000000000000000000000000000000000000000000000004, 10004471238800000000000' \
+    --account '0x0000000000000000000000000000000000000000000000000000000000000005, 10004471238800000000000' \
+    --account '0x0000000000000000000000000000000000000000000000000000000000000006, 10004471238800000000000' \
+    --account '0x0000000000000000000000000000000000000000000000000000000000000007, 10004471238800000000000' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000001' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000002' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000003' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000004' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000005' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000006' \
+    --unlock '0x0000000000000000000000000000000000000000000000000000000000000007' \
+    --unlock '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf' \
+    --unlock '0x2b5ad5c4795c026514f8317c7a215e218dccd6cf' \
+    --blocktime 0 \
+    --deterministic true \
+    --port 8545 \
+    --hostname localhost \
+    --gasPrice 20000000000 \
+    --gasLimit 0x47E7C4 \
+    --debug true \
+    --mem true \
+    --db './db/chaindb'
+  ```
+* Install Truffle
+  ```
+  npm install -g truffle;
+  cd api; truffle init;
+  ```
 
 ## FAQ <a id="chapter-faq"></a>
 
@@ -182,3 +224,6 @@ PEER-AI
 
 * [ ] Integrate with Peerism React Native app
 * [ ] Integrate Solidity smart contract using TestRPC
+* [ ] Create a Truffle Box
+  * https://github.com/trufflesuite/truffle/issues/433
+  * http://truffleframework.com/boxes/
