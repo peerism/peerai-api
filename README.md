@@ -149,6 +149,16 @@ PEER-AI
   touch .sample-env;
   echo 'NODE_ENV=development' >> ./.sample-env;
   ```
+* Add Ethereum dependencies
+  ```
+  yarn install web3 ethereumjs-util ethereumjs-tx eth-lightwallet
+  yarn install ethereumjs-testrpc
+  ```
+  * References
+    * https://medium.com/@codetractio/try-out-ethereum-using-only-nodejs-and-npm-eabaaaf97c80
+    * EthereumJS Util - Library for cryptographic hashes for Ethereum addresses - https://github.com/ethereumjs/ethereumjs-util
+    * EthereumJS Tx - library to create, edit, and sign Ethereum transactions - https://github.com/ethereumjs/ethereumjs-tx
+    * EthereumJS LightWallet - https://github.com/ConsenSys/eth-lightwallet
 
 ## FAQ <a id="chapter-faq"></a>
 

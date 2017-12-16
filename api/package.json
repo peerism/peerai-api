@@ -19,6 +19,7 @@
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
+    "ethereumjs-testrpc": "^6.0.3",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.5"
   },
