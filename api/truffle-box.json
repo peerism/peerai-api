@@ -1,0 +1,17 @@
+{
+  "ignore": [
+    "README.md",
+    ".gitignore"
+  ],
+  "commands": {
+    "Run MongoDB server in Terminal #1": "npm run mongod",
+    "Compile contracts in Terminal #2": "npm run compile",
+    "Deploy contracts in Terminal #2": "npm run deploy",
+    "Test contracts in Terminal #2": "truffle test",
+    "Run dev server in Terminal #2": "npm run drop; npm run dev;",
+    "Compile and migrate contracts with request to API in Terminal #3": "npm run curl"
+  },
+  "hooks": {
+    "post-unpack": ""
+  }
+}

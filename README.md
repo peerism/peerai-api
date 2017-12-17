@@ -13,20 +13,16 @@ PEER-AI
 
 ## Quick Start Guide <a id="chapter-0"></a>
 
-* Change directory into the API folder
-  ```
-  cd api;
-  ```
-
-* Install and switch to latest Node.js version
-  ```
-  nvm install v9.3.0
-  nvm use v9.3.0
-  ```
-
-* Run MongoDB Server
+* Terminal Tab #1 - Run MongoDB Server in a separate Terminal tab
   ```
   mongod
+  ```
+
+* Terminal Tab #2 - Change into API folder. Install and switch to latest Node.js version
+  ```
+  cd api;
+  nvm install v9.3.0;
+  nvm use v9.3.0
   ```
 
 * Compile Smart Contracts
@@ -54,12 +50,12 @@ PEER-AI
   truffle test;
   ```
 
-* Drop the server. Run server then try cURL requests
+* Terminal Tab #3 - Drop the server. Run server, then try cURL requests
   ```
   yarn run drop; yarn run dev;
   ``` 
 
-* Send request to server and receive response for authentication and authorisation to access specific API endpoints.
+* Terminal Tab #4 - Send request to server and receive response for authentication and authorisation to access specific API endpoints.
   * cURL
     * Register with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
@@ -81,7 +77,7 @@ PEER-AI
       curl -v -X POST http://localhost:7000/users/create -d "email=test2@fake.com&name=Test2" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
       ```
 
-* Send request to server with Smart Contract Name to be Compiled and Deployed to the Ethereum TestRPC and receive response with the Contract Address.
+* Terminal Tab #4 - Send request to server with Smart Contract Name to be Compiled and Deployed to the Ethereum TestRPC and receive response with the Contract Address.
   * cURL
     ```
     curl -v -X POST http://localhost:7000/contracts/generate -d '{"contractName":"Peerism"}' -H "Content-Type: application/json"
@@ -92,13 +88,9 @@ PEER-AI
   yarn run drop; yarn run test-watch
   ```
 
-* Drop the database
+* Drop the database. Seed the database
   ```
   yarn run drop;
-  ```
-
-* Seed the database
-  ```
   yarn run seed;
   ```
 
@@ -342,8 +334,8 @@ PEER-AI
 
 ## TODO <a id="chapter-todo"></a>
 
-* [ ] Integrate with Peerism React Native app
-* [ ] Integrate Solidity smart contract using TestRPC
+* [ ] Integrate with [Peerism React Native app](https://github.com/peerism/peer.ai)
+* [X] Integrate Solidity smart contract using TestRPC
 * [ ] Create a Truffle Box
   * https://github.com/trufflesuite/truffle/issues/433
   * http://truffleframework.com/boxes/
