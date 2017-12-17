@@ -31,7 +31,11 @@
     "truffle-artifactor": "^3.0.1"
   },
   "scripts": {
+    "mongod": "mongod",
     "dev": "NODE_ENV=development nodemon server.js",
+    "compile": "node lib/compileContract.js Peerism",
+    "deploy": "node lib/deployContract.js Peerism",
+    "curl": "curl -v -X POST http://localhost:7000/contracts/generate -d '{\"contractName\":\"Peerism\"}' -H 'Content-Type: application/json'",
     "seed": "node ./models/seeds.js",
     "drop": "node ./models/drop.js",
     "reset": "npm run drop && npm run seed",
