@@ -1,0 +1,17 @@
+{
+  "package_name": "truffle-box-peerism-api-node-express",
+  "version": "0.0.1",
+  "description": "Truffle Box of Peerism API built with Truffle, Node.js, Express.js,
+  Solidity, Ether Pudding, and Ethereum TestRPC",
+  "authors": [
+    "Luke Schoen <ltfschoen@gmail.com>"
+  ],
+  "keywords": [
+    "ethereum",
+    "express.js",
+    "node.js",
+    "middleware",
+    "api"
+  ],
+  "license": "MIT"
+}

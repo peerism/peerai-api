@@ -6,6 +6,9 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "eth-lightwallet": "2.5",
+    "ethereumjs-tx": "1.3",
+    "ethereumjs-util": "4.4",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.1.0",
     "lodash": "^4.17.4",
@@ -13,22 +16,26 @@
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",
-    "passport-local-mongoose": "^4.4.0"
+    "passport-local-mongoose": "^4.4.0",
+    "web3": "0.19"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
+    "ether-pudding": "^3.2.0",
     "ethereumjs-testrpc": "^6.0.3",
     "mocha": "^4.0.1",
-    "nodemon": "^1.13.3"
+    "nodemon": "^1.13.3",
+    "solc": "^0.4.19",
+    "truffle-artifactor": "^3.0.1"
   },
   "scripts": {
     "dev": "NODE_ENV=development nodemon server.js",
     "seed": "node ./models/seeds.js",
     "drop": "node ./models/drop.js",
     "reset": "npm run drop && npm run seed",
-    "test": "NODE_ENV=testing mocha --recursive test/**/*_test.js",
+    "test": "truffle test; NODE_ENV=testing mocha --recursive test/**/*_test.js",
     "test-watch": "nodemon --exec \"yarn test\""
   }
 }

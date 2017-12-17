@@ -13,11 +13,15 @@ PEER-AI
 
 ## Quick Start Guide <a id="chapter-0"></a>
 
-* Compile, migrate, and test Smart Contracts
+* Change directory into the API folder
   ```
-  truffle compile;
-  truffle migrate;
-  truffle test;
+  cd api;
+  ```
+
+* Install and switch to latest Node.js version
+  ```
+  nvm install v9.3.0
+  nvm use v9.3.0
   ```
 
 * Run MongoDB Server
@@ -25,12 +29,37 @@ PEER-AI
   mongod
   ```
 
+* Compile Smart Contracts
+  * Option 1: Generates build/contracts/Peerism.sol.js
+    ```
+    node lib/compileContract.js Peerism
+    ```
+  * Option 2: Genertes build/contracts/Peerism.json (DEPRECATED)
+    ```
+    truffle compile --compile-all;
+    ```
+
+* Deploy Smart Contracts
+  * Option 1: Deploy without Truffle
+    ```
+    node lib/deployContract.js Peerism
+    ```
+  * Option 2: Deploy with Truffle (DEPRECATED)
+    ```
+    truffle migrate --reset --network development;
+    ```
+
+* Run Tests
+  ```
+  truffle test;
+  ```
+
 * Drop the server. Run server then try cURL requests
   ```
   yarn run drop; yarn run dev;
   ``` 
 
-* Run client to send request to server and receive response
+* Send request to server and receive response for authentication and authorisation to access specific API endpoints.
   * cURL
     * Register with email/password. JWT provided in response (i.e. `{"token":"xyz"}`)
       ```
@@ -51,6 +80,12 @@ PEER-AI
       curl -v -X POST http://localhost:7000/users/create --data '[{"email":"test@fake.com", "name":"Test"}]' -H "Content-Type: application/json" -H "Authorization: JWT <INSERT_TOKEN>"
       curl -v -X POST http://localhost:7000/users/create -d "email=test2@fake.com&name=Test2" -H "Content-Type: application/x-www-form-urlencoded" -H "Authorization: JWT <INSERT_TOKEN>"
       ```
+
+* Send request to server with Smart Contract Name to be Compiled and Deployed to the Ethereum TestRPC and receive response with the Contract Address.
+  * cURL
+    ```
+    curl -v -X POST http://localhost:7000/contracts/generate -d '{"contractName":"Peerism"}' -H "Content-Type: application/json"
+    ```
 
 * Run Tests on port 7111
   ```
@@ -158,14 +193,25 @@ PEER-AI
   ```
 * Add Ethereum dependencies including TestRPC
   ```
-  yarn add web3 ethereumjs-util ethereumjs-tx eth-lightwallet;
+  yarn add web3@0.19 ethereumjs-util@4.4 ethereumjs-tx@1.3 eth-lightwallet@2.5;
   yarn add ethereumjs-testrpc --dev;
+  yarn add solc ether-pudding --dev;
+  yarn add truffle-artifactor --dev;
   ```
   * References
     * https://medium.com/@codetractio/try-out-ethereum-using-only-nodejs-and-npm-eabaaaf97c80
+    * Smart Contracts without Truffle - https://medium.com/@doart3/ethereum-dapps-without-truffle-compile-deploy-use-it-e6daeefcf919
     * EthereumJS Util - Library for cryptographic hashes for Ethereum addresses - https://github.com/ethereumjs/ethereumjs-util
     * EthereumJS Tx - library to create, edit, and sign Ethereum transactions - https://github.com/ethereumjs/ethereumjs-tx
     * EthereumJS LightWallet - https://github.com/ConsenSys/eth-lightwallet
+    * Solc - Compile Solidity Contract - https://www.npmjs.com/package/solc
+    * Ether Pudding - Manage Solidity Contracts and Packages - https://www.npmjs.com/package/ether-pudding
+    * Truffle Artifactor - replaces Ether Pudding - https://github.com/trufflesuite/truffle-artifactor
+    * Reading from JSON files - https://www.codementor.io/codementorteam/how-to-use-json-files-in-node-js-85hndqt32
+
+* Problem: Tried to manually compile using Solc with `node lib/compileContract.js ConvertLib`, which generates ConvertLib.solc.js in api/build/contracts. However it does not compile MetaCoin.sol, as it returns error `1:27: ParserError: Source "ConvertLib.sol" not found: File not supplied initially.\n ... import "./ConvertLib.sol"`.
+  * Solution: Use Truffle to compile Solidity contracts with `truffle compile --compile-all`
+
 * Run shell script in new Terminal tab (copy from https://github.com/ltfschoen/solidity_test/blob/master/testrpc.sh)
   ```
   rm -rf ./db;
@@ -191,7 +237,7 @@ PEER-AI
     --port 8545 \
     --hostname localhost \
     --gasPrice 20000000000 \
-    --gasLimit 0x47E7C4 \
+    --gasLimit 1000000 \
     --debug true \
     --mem true \
     --db './db/chaindb'
@@ -201,6 +247,80 @@ PEER-AI
   npm install -g truffle;
   cd api; truffle init;
   ```
+* Run Truffle Unbox in separate directory to get template Metacoin example and move relevant boilerplate contracts and tests into the api/ folder
+* Update package.json tests script to run tests for Smart Contracts and API tests:
+  ```
+  "test": "truffle test; NODE_ENV=testing mocha --recursive test/**/*_test.js",
+  ```
+* Remove truffle-config.js and add the following to truffle.js:
+  ```
+  module.exports = {
+    // http://truffleframework.com/docs/advanced/configuration
+    networks: {
+      development: {
+        host: "localhost",
+        port: 8545,
+        network_id: "*" // Match any network id
+      }
+    }
+  };
+  ```
+* Add ethpm.json for EthPM Package Management 
+  ```
+  {
+    "package_name": "truffle-box-peerism-api-node-express",
+    "version": "0.0.1",
+    "description": "Truffle Box of Peerism API built with Truffle, Node.js, Express.js,
+  Solidity, Ether Pudding, and Ethereum TestRPC",
+    "authors": [
+      "Luke Schoen <ltfschoen@gmail.com>"
+    ],
+    "keywords": [
+      "ethereum",
+      "express.js",
+      "node.js",
+      "middleware",
+      "api"
+    ],
+    "license": "MIT"
+  }
+  ```
+  * References: 
+    * http://truffleframework.com/docs/getting_started/packages-ethpm
+
+* Open api/node_modules/bitcore-mnemoic/node_modules/bitcore-lib/index.js and commented out the following lines of code to avoid an error.
+  ```
+  bitcore.versionGuard = function(version) {
+    // if (version !== undefined) {
+    //   var message = 'More than one instance of bitcore-lib found. ' +
+    //     'Please make sure to require bitcore-lib and check that submodules do' +
+    //     ' not also include their own bitcore-lib dependency.';
+    //   throw new Error(message);
+    // }
+  };
+  ```
+
+* Run Truffle Console experimentation
+  ```
+  truffle console --network development;
+  ```
+
+* Build script for Smart Contract (generates .sol.js file in build/contracts/)
+  ```
+  cd api; mkdir lib;
+  node lib/compileContract.js Peerism
+  ```
+  * Alternatively compile with Truffle
+
+* Deployment script for Smart Contract
+  * Reference: https://medium.com/@codetractio/try-out-ethereum-using-only-nodejs-and-npm-eabaaaf97c80
+  ```
+  touch lib/deployContract.js;
+  node lib/deployContract.js Peerism;
+  ```
+  * References:
+    * http://truffleframework.com/docs/getting_started/contracts
+    * Gas Limits - https://bitcoin.stackexchange.com/questions/39132/what-is-gas-limit-in-ethereum
 
 ## FAQ <a id="chapter-faq"></a>
 
