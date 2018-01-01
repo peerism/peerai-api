@@ -4,6 +4,12 @@
 PEER-AI
 ---
 
+* About - Peerism API built with Truffle, Node.js, Express.js, Mongoose, MongoDB, Solidity, and Ganache CLI (TestRPC).
+
+* Instructions - Setup instructions (for macOS) are provided in the [Quick Start Guide](https://github.com/peerism/peerai-api#quick-start-guide-) shown below.
+
+* Usage Capabilities - Use cURL to simulate a HTTP POST request to a Peerism API endpoint (instead of sending a request from the Peerism React Native ÐApp https://github.com/peerism/peer.ai). Alternatively allows triggering Middleware functions individually. API routes use an Express.js Middleware Chain that allow a request to compile the Peerism Smart Contract using Solidity Compiler (Solc) and Ether Pudding, then deploy it to the Ethereum TestRPC test network blockchain and responds with the contract address.
+
 # Table of Contents
   * [Quick Start Guide](#chapter-0)
   * [Log](#chapter-log)
@@ -13,44 +19,90 @@ PEER-AI
 
 ## Quick Start Guide <a id="chapter-0"></a>
 
+* Terminal Tab #1 - Install dependencies including Ganache CLI (TestRPC from the Truffle Suite)
+  ```
+  nvm install v9.3.0;
+  nvm use;
+  nvm use v9.3.0;
+  yarn install;
+  npm install -g ganache-cli
+  ```
+
 * Terminal Tab #1 - Run MongoDB Server in a separate Terminal tab
   ```
   mongod
   ```
 
-* Terminal Tab #2 - Change into API folder. Install and switch to latest Node.js version
-  ```
-  cd api;
-  nvm install v9.3.0;
-  nvm use v9.3.0
-  ```
+* Terminal Tab #2 - Run Ethereum Client using Ganache CLI (TestRPC).
 
-* Compile Smart Contracts
-  * Option 1: Generates build/contracts/Peerism.sol.js
-    ```
-    node lib/compileContract.js Peerism
-    ```
-  * Option 2: Genertes build/contracts/Peerism.json (DEPRECATED)
-    ```
-    truffle compile --compile-all;
-    ```
+```
+rm -rf ./db;
+mkdir -p db/chaindb;
+ganache-cli --account '0x0000000000000000000000000000000000000000000000000000000000000001, 10002471238800000000000' \
+  --account '0x0000000000000000000000000000000000000000000000000000000000000002, 10004471238800000000000' \
+  --unlock '0x0000000000000000000000000000000000000000000000000000000000000001' \
+  --unlock '0x0000000000000000000000000000000000000000000000000000000000000002' \
+  --unlock '0x7e5f4552091a69125d5dfcb7b8c2659029395bdf' \
+  --unlock '0x2b5ad5c4795c026514f8317c7a215e218dccd6cf' \
+  --blocktime 0 \
+  --deterministic true \
+  --port 8545 \
+  --hostname localhost \
+  --gasPrice 20000000000 \
+  --gasLimit 0x8000000 \
+  --debug true \
+  --mem true \
+  --networkId 1337 \
+  --db './db/chaindb'
+```
 
-* Deploy Smart Contracts
-  * Option 1: Deploy without Truffle
-    ```
-    node lib/deployContract.js Peerism
-    ```
-  * Option 2: Deploy with Truffle (DEPRECATED)
-    ```
-    truffle migrate --reset --network development;
-    ```
+* Terminal Tab #3 - Compile and Deploy Smart Contracts to TestRPC blockchain
 
-* Run Tests
+  * Compile Smart Contracts
+
+    * Option 1: Generates build/contracts/Peerism.sol.js
+      ```
+      node lib/compileContract.js Peerism
+      ```
+
+    * Option 2: Genertes build/contracts/Peerism.json (DEPRECATED)
+      ```
+      truffle compile --compile-all;
+      ```
+
+  * Deploy Smart Contracts
+
+    * Option 1: Deploy without Truffle
+
+      * Modify Bitcore dependency before running the next command to avoid error `Error: More than one instance of bitcore-lib found. Please make sure to require bitcore-lib and check that submodules do not also include their own bitcore-lib dependency.`, as described here: https://github.com/bitpay/bitcore/issues/1454, by opening node_modules/bitcore-mnemonic/node_modules/bitcore-lib/index.js and commented out the following lines of code to avoid an error.
+        ```
+        bitcore.versionGuard = function(version) {
+          // if (version !== undefined) {
+          //   var message = 'More than one instance of bitcore-lib found. ' +
+          //     'Please make sure to require bitcore-lib and check that submodules do' +
+          //     ' not also include their own bitcore-lib dependency.';
+          //   throw new Error(message);
+          // }
+        };
+        ```
+
+      ```
+      node lib/deployContract.js Peerism
+      ```
+
+    * Option 2: Deploy with Truffle (DEPRECATED)
+      ```
+      truffle migrate --reset --network development;
+      ```
+
+    * Note: Watch the deployment transactions being send to the blockchain in Terminal Tab #2
+
+* Terminal Tab #3 - Run Tests
   ```
   truffle test;
   ```
 
-* Terminal Tab #3 - Drop the server. Run server, then try cURL requests
+* Terminal Tab #4 - Drop the server. Run server, then try cURL requests
   ```
   yarn run drop; yarn run dev;
   ``` 
@@ -83,12 +135,48 @@ PEER-AI
     curl -v -X POST http://localhost:7000/contracts/generate -d '{"contractName":"Peerism"}' -H "Content-Type: application/json"
     ```
 
-* Run Tests on port 7111
+* Terminal Tab #4 - Experiment in REPL
+
+  * Use Truffle Console
+
+    * Run Truffle Console
+      ```
+      truffle console --network development;
+      ```
+
+    * Run commands
+      ```
+      web3
+      web3.currentProvider
+      web3.eth.getBalance('0x7e5f4552091a69125d5dfcb7b8c2659029395bdf')
+      ```
+
+  * Attach to EthereumJS TestRPC using Go Ethereum (Geth)
+    * [Install Geth] 
+
+    * Start Geth JavaScript console
+
+      ```
+      geth attach rpc:http://localhost:8545
+      ```
+
+    * Run commands
+
+      ```
+      web3
+      web3.currentProvider
+      web3.eth.getBalance('0x7e5f4552091a69125d5dfcb7b8c2659029395bdf')
+      eth.accounts
+      ```
+
+  * Optional: Try to perform RPC calls to Ganache TestRPC using cURL. https://github.com/trufflesuite/ganache-cli/issues/383
+
+* Terminal Tab #5 - Run Tests on port 7111
   ```
   yarn run drop; yarn run test-watch
   ```
 
-* Drop the database. Seed the database
+* Terminal Tab #1 - Drop the database. Seed the database
   ```
   yarn run drop;
   yarn run seed;
@@ -98,20 +186,20 @@ PEER-AI
 
 * Initial setup
   ```
-  git init; touch README.md; touch .gitignore; mkdir api web;
+  git init; touch README.md; touch .gitignore;
   code .;
   ```
   * [Add boilerplate contents to .gitignore for Node.js](https://github.com/github/gitignore/blob/master/Node.gitignore)
 
 * Setup API
   ```
-  cd api; yarn init -y; 
+  yarn init -y; 
   yarn add express body-parser;
   yarn add nodemon --dev;
   touch server.js;
   ```
-* Add boilerplate contents to api/server.js
-* Add "dev" in "scripts" section of api/package.json
+* Add boilerplate contents to server.js
+* Add "dev" in "scripts" section of package.json
 
 * Add Mongoose
   ```
@@ -124,7 +212,7 @@ PEER-AI
 
 * Create Models for Mongoose
 * Add boilerplate contents to models
-* Add scripts to api/package.json
+* Add scripts to package.json
 
 * Run MongoDB Server
   ```
@@ -201,7 +289,7 @@ PEER-AI
     * Truffle Artifactor - replaces Ether Pudding - https://github.com/trufflesuite/truffle-artifactor
     * Reading from JSON files - https://www.codementor.io/codementorteam/how-to-use-json-files-in-node-js-85hndqt32
 
-* Problem: Tried to manually compile using Solc with `node lib/compileContract.js ConvertLib`, which generates ConvertLib.solc.js in api/build/contracts. However it does not compile MetaCoin.sol, as it returns error `1:27: ParserError: Source "ConvertLib.sol" not found: File not supplied initially.\n ... import "./ConvertLib.sol"`.
+* Problem: Tried to manually compile using Solc with `node lib/compileContract.js ConvertLib`, which generates ConvertLib.solc.js in build/contracts. However it does not compile MetaCoin.sol, as it returns error `1:27: ParserError: Source "ConvertLib.sol" not found: File not supplied initially.\n ... import "./ConvertLib.sol"`.
   * Solution: Use Truffle to compile Solidity contracts with `truffle compile --compile-all`
 
 * Run shell script in new Terminal tab (copy from https://github.com/ltfschoen/solidity_test/blob/master/testrpc.sh)
@@ -237,9 +325,9 @@ PEER-AI
 * Install Truffle
   ```
   npm install -g truffle;
-  cd api; truffle init;
+  truffle init;
   ```
-* Run Truffle Unbox in separate directory to get template Metacoin example and move relevant boilerplate contracts and tests into the api/ folder
+* Run Truffle Unbox in separate directory to get template Metacoin example and move relevant boilerplate contracts and tests into the the root folder
 * Update package.json tests script to run tests for Smart Contracts and API tests:
   ```
   "test": "truffle test; NODE_ENV=testing mocha --recursive test/**/*_test.js",
@@ -280,7 +368,7 @@ PEER-AI
   * References: 
     * http://truffleframework.com/docs/getting_started/packages-ethpm
 
-* Open api/node_modules/bitcore-mnemoic/node_modules/bitcore-lib/index.js and commented out the following lines of code to avoid an error.
+* Open node_modules/bitcore-mnemonic/node_modules/bitcore-lib/index.js and commented out the following lines of code to avoid an error.
   ```
   bitcore.versionGuard = function(version) {
     // if (version !== undefined) {
@@ -299,7 +387,7 @@ PEER-AI
 
 * Build script for Smart Contract (generates .sol.js file in build/contracts/)
   ```
-  cd api; mkdir lib;
+  mkdir lib;
   node lib/compileContract.js Peerism
   ```
   * Alternatively compile with Truffle
@@ -339,3 +427,5 @@ PEER-AI
 * [ ] Create a Truffle Box
   * https://github.com/trufflesuite/truffle/issues/433
   * http://truffleframework.com/boxes/
+* [ ] Upgrade to latest Web3 1.0.0 Beta-27 that has been successfully used in
+https://github.com/ltfschoen/geth-node to deploy a FixedSupplyToken.sol smart contract to a Private Network with Geth

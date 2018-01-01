@@ -59,3 +59,6 @@ typings/
 
 # Visual studio code
 .vscode
+
+# Ganache TestRPC blockchain data
+db/

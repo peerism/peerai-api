@@ -1,6 +1,6 @@
 {
-  "name": "peerai",
-  "version": "0.1.0",
+  "name": "peerai-api",
+  "version": "0.1.1",
   "main": "index.js",
   "author": "Luke Schoen",
   "license": "MIT",
@@ -24,10 +24,9 @@
     "chai-http": "^3.0.0",
     "dotenv": "^4.0.0",
     "ether-pudding": "^3.2.0",
-    "ethereumjs-testrpc": "^6.0.3",
     "mocha": "^4.0.1",
     "nodemon": "^1.13.3",
-    "solc": "^0.4.19",
+    "solc": "^0.4.18",
     "truffle-artifactor": "^3.0.1"
   },
   "scripts": {
