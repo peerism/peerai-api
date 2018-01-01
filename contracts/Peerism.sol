@@ -1,4 +1,4 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.4.18;
 
 contract Peerism {
 
@@ -28,7 +28,7 @@ contract Peerism {
     SkillEvent(msg.sender, _id, 1);
   }
 
-  function() payable {
+  function() public payable {
     fallbackTriggered = true;
   }
 }
