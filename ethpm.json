@@ -1,6 +1,6 @@
 {
   "package_name": "truffle-box-peerism-api-node-express",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "Truffle Box of Peerism API built with Truffle, Node.js, Express.js,
   Solidity, Ether Pudding, and Ethereum TestRPC",
   "authors": [

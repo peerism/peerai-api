@@ -152,7 +152,7 @@ ganache-cli --account '0x0000000000000000000000000000000000000000000000000000000
       ```
 
   * Attach to EthereumJS TestRPC using Go Ethereum (Geth)
-    * [Install Geth] 
+    * [Install Geth](https://github.com/ethereum/go-ethereum/wiki/Installation-Instructions-for-Mac)
 
     * Start Geth JavaScript console
 
